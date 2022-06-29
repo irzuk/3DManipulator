@@ -182,6 +182,7 @@ public class Robot implements KeyListener {
             int counter = 0;
             while (true) {
                 s.write(1 + "\n");
+                glove.write(1 + "\n");
 
                 System.out.println("Manipulator:" + Arrays.toString(robot.data));
 
@@ -207,6 +208,9 @@ public class Robot implements KeyListener {
                         continue;
                     }
                     num = pipedReader.read();
+                    if (num > 360) {
+                        num -= 65535;
+                    }
                     recievedData[count] = num;
                     count++;
                 }
@@ -232,7 +236,7 @@ public class Robot implements KeyListener {
                     }
                     if (Math.abs(recievedDataPrev[2] - recievedData[2]) > 0) {
                         System.out.println("Arm moved for: " + (recievedDataPrev[2] - recievedData[2]));
-                        Rarm.rotate(new Vector3d(2, 4.6, 0), 0, 0, recievedDataPrev[2] - recievedData[2]);
+                        Rarm.rotate(new Vector3d(2, 4.6, 0), 0, 0, recievedData[2] - recievedDataPrev[2]);
                     }
                     if (Math.abs(recievedDataPrev[0] - recievedData[0]) > 0) {
                         System.out.println("Base moved for: " + (recievedDataPrev[0] - recievedData[0]));
@@ -253,14 +257,21 @@ public class Robot implements KeyListener {
                             continue;
                         }
                         num2 = pipedGlove.read();
+                        if (num2 > 360) {
+                            num2 -= 65535;
+                        }
                         data2[count2] = num2;
                         count2++;
                     }
                 }
                 System.out.println("Glove" + Arrays.toString(data2));
 
-               // robot.target.y += (float)(data2[0] - robot.angs[0]) / 5;
-               // robot.target.x += (float)(data2[1] - robot.angs[1]) / 5;
+//                Rplatform.rotate(new Vector3d(0, 0, 0), 0, dataPlatformAngels[1] - recievedData[7], dataPlatformAngels[0] - recievedData[6]);
+//                dataPlatformAngels[0] = recievedData[6];
+//                dataPlatformAngels[1] = recievedData[7];
+
+                robot.target.y -= (float)(data2[0] - robot.angs[0]) / 5;
+                robot.target.x += (float)(data2[1] - robot.angs[1]) / 5;
 
                 robot.angs[0] = data2[0];
                 robot.angs[1] = data2[1];
