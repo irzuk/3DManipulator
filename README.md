@@ -4,7 +4,7 @@ Manipulator on the movable platform that is based on Arduino. Controlled by hand
 The platform, manipulator and glove are connected to the control computer by Java. 
 
 
-![This is an image](photo_2022-06-29 21.37.03.jpeg)
+![This is an image](photo_2022.png)
 
 Components:
 - Manipulator:
